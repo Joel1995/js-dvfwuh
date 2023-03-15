@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <title>Proyecto Visualizacion de Datos</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3plus/1.9.2/d3plus.full.min.js"></script>
+  </head>
+  <body>
+    <div class="contenedor">
+      <div class="principal">
+        Selección de Características mediante Clustering
+      </div>
+      <br />
+
+      <div class="encabezado">
+        <b>Autor:</b> Joel Alexander Coronel Quinaluisa <br /><br />
+        <b>Url:</b>
+        <a href="https://js-dvfwuh.stackblitz.io"
+          >https://js-dvfwuh.stackblitz.io</a
+        ><br /><br />
+        <b>Google Colab:</b>
+        <a
+          href="https://drive.google.com/file/d/1tNwk3ZZ0x9jaczLvqYj51p8vbfxK8wvc/view?usp=sharing"
+          >https://drive.google.com/file/d/1tNwk3ZZ0x9jaczLvqYj51p8vbfxK8wvc/view?usp=sharing</a
+        ><br /><br />
+        <b>GitHub:</b>
+        <a href="https://github.com/Joel1995/Proyecto_Visualizacion_Datos.git"
+          >https://github.com/Joel1995/Proyecto_Visualizacion_Datos.git</a
+        ><br /><br />
+        <b>Fuente:</b>
+        <a
+          href="https://drive.google.com/file/d/1Rb_7eNacmktJM3RqETQmSLysXYjk5EDG/view"
+          >https://drive.google.com/file/d/1Rb_7eNacmktJM3RqETQmSLysXYjk5EDG/view</a
+        ><br /><br />
+        <b>Fecha:</b> 22/11/2022
+      </div>
+
+      <br />
+      <div class="secundario1">INTRODUCCIÓN</div>
+      El ejemplo que se va a realizar a continuación proviene de otra asignaura
+      (Machine Learning). Es un ejercicio en el cual nos permite seleccionar las
+      características más relevantes dentro del dataset, mediante clustering. El
+      Dataset a utilizar es de datos del Producto Interno Bruto de los Estados
+      Unidos en el año 2009.<br /><br />
+      Para entender mejor el dataset es importante tener en cuenta a que se
+      refiere cada una de sus variables por lo cual se describe a continuación
+      cada una de ellas:<br /><br />
+      <b>- State:</b> Se refiere a los estados que se encuentran dentro del país
+      de EEUU.<br /><br />
+      <b>- Agriculture:</b> El PIB(Producto Interno Bruto) proveniente de la
+      agricultura<br /><br />
+      <b>- Mining:</b> El PIB(Producto Interno Bruto) proveniente de la
+      minería<br /><br />
+      <b>- Utilities:</b> El PIB(Producto Interno Bruto) proveniente de las
+      utilidades<br /><br />
+      <b>- Construction:</b> El PIB(Producto Interno Bruto) proveniente de la
+      construcción<br /><br />
+      <b>- Manufacturing:</b> El PIB(Producto Interno Bruto) proveniente de la
+      manufactura<br /><br />
+      <b>- Wholesale trade:</b> El PIB(Producto Interno Bruto) proveniente del
+      comercio al por mayor<br /><br />
+      <b>- Retail:</b> El PIB(Producto Interno Bruto) proveniente de ventas
+      minoristas<br /><br />
+      <b>- Transportation:</b> El PIB(Producto Interno Bruto) proveniente del
+      transporte<br /><br />
+      <b>- Information:</b> El PIB(Producto Interno Bruto) proveniente de medios
+      de información<br /><br />
+      <b>- Finance:</b> El PIB(Producto Interno Bruto) proveniente de las
+      Finanzas<br /><br />
+      <b>- Buss. Services:</b> El PIB(Producto Interno Bruto) proveniente de los
+      servicios de negocio<br /><br />
+      <b>- Education:</b> El PIB(Producto Interno Bruto) proveniente de la
+      educación<br /><br />
+      <b>- Arts:</b> El PIB(Producto Interno Bruto) proveniente de las artes<br /><br />
+      <b>- Oth Serv.:</b> El PIB(Producto Interno Bruto) proveniente de otros
+      servicios<br /><br />
+      <b>- Fed. civ:</b> El PIB(Producto Interno Bruto) servicios federales<br /><br />
+      <b>- Fed. military:</b> El PIB(Producto Interno Bruto) proveniente de la
+      parte militar<br /><br />
+      <b>- State1:</b> El PIB(Producto Interno Bruto) proveniente del estado<br /><br />
+      Para todas las variables descritas anteriormente a excepción de la
+      variable State, su magnitud es de millones de dolares. De igual manera
+      tener en cuenta que cada caracteristica refleja el valor monetario de
+      todos los bienes y servicios finales producidos por EEUU en todo el año
+      2009.<br /><br />
+
+      <div class="secundario1">OBJETIVOS</div>
+      <b>*</b> Obtener una visión global de los datos y su respectiva
+      correlación en los mismos. <br /><br />
+      <b>*</b> Observar las relaciones de similitud entre el desarrollo de las
+      variables. <br /><br />
+      <b>*</b> Descubrir que elementos son de tipo outliers, utilizando
+      diferentes algoritmos de clustering.
+
+      <div class="secundario2">TABLA DE DATOS CON DATAWRAPPER</div>
+
+      Para entender de mejor manera nuestra data podríamos presentar las
+      primeras 5 filas, en forma de tabla, a través de la herramienta
+      Datawrapper se puede realizar la tabla y mostrar las primeras 5 filas,
+      como se muestra a continuación:
+
+      <iframe
+        title=""
+        aria-label="Table"
+        id="datawrapper-chart-2xPCg"
+        src="https://datawrapper.dwcdn.net/2xPCg/1/"
+        scrolling="no"
+        frameborder="0"
+        style="width: 0; min-width: 100% !important; border: none"
+        height="337"
+        data-external="1"
+      ></iframe>
+      <script type="text/javascript">
+        !(function () {
+          'use strict';
+          window.addEventListener('message', function (e) {
+            if (void 0 !== e.data['datawrapper-height']) {
+              var t = document.querySelectorAll('iframe');
+              for (var a in e.data['datawrapper-height'])
+                for (var r = 0; r < t.length; r++) {
+                  if (t[r].contentWindow === e.source)
+                    t[r].style.height = e.data['datawrapper-height'][a] + 'px';
+                }
+            }
+          });
+        })();
+      </script>
+      <center>
+        <b>Tabla 1. </b>Características del datast a trabajar (Realizado en
+        Datawrapper)
+      </center>
+      <br />
+      <br />
+
+      <div class="secundario2">GRÁFICAS CON GOOGLE SHEETS</div>
+
+      De igual manera se puede observar mediante un gráfico de barras las
+      características de cada estado de EEUU, como por ejemplo graficaremos las
+      características que conforman el PIB del estado de Alabama y el estado de
+      California
+      <center>
+        <iframe
+          width="900"
+          height="500"
+          seamless
+          frameborder="0"
+          scrolling="no"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTDJ_qhkAYoLYCRBih-Cok7MSbU3x7Vqy5A7P0lDgHlH1Ibw4CENjMcMAP_4XYEXRkOqOymMBj-TqnJ/pubchart?oid=1178041507&format=interactive"
+        ></iframe>
+      </center>
+      <center>
+        <b>Figura 1. </b>Características del estado de Alabama (Realizado en
+        Google Sheets)
+      </center>
+      <br />
+      Con el anterior gráfico podemos darnos cuenta que dentro del estado de
+      Alabama el servicio que tiene mayor aporte monetario es la manufactura con
+      un total de 25444 millones de dolares, en cambio es de notar que el que
+      menos produce o lo que menos genera riqueza en el estado de Alabama es la
+      Agricultura. Quizá dentro de este país el suelo no sea muy fertil, o no
+      tengan buen clima o incluso puede ser que ya no exista areas verdes o
+      campos y el estado esté lleno de edificios y fábricas.
+
+      <br />
+      <br />
+
+      <center>
+        <iframe
+          width="900"
+          height="500"
+          seamless
+          frameborder="0"
+          scrolling="no"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTDJ_qhkAYoLYCRBih-Cok7MSbU3x7Vqy5A7P0lDgHlH1Ibw4CENjMcMAP_4XYEXRkOqOymMBj-TqnJ/pubchart?oid=696453081&format=interactive"
+        ></iframe>
+      </center>
+      <center>
+        <b>Figura 2. </b>Características del estado de California (Realizado en
+        Google Sheets)
+      </center>
+      <br />
+
+      Se puede observar que las variables más altas en PIB, coinciden en los dos
+      estados que se graficaron anteriormente, dichas variables son:
+      Manufacturing, Finance, Buss. Services, State y Education. Con lo cual se
+      puede llegar a la conclusión de que los dos estados demográficamente son
+      similares ya que en ambos la agricultura tiene un aporte super bajo, de
+      igual manera puede ser que las personas que viven tanto en Alabama como en
+      California tengan un estilo de vida similar o las mismas costumbres.
+
+      <br /><br />
+      Hemos observado las características de solo dos de los 51 estados que
+      disponemos en nuestro dataset podriamos ir viendo uno por uno y observando
+      las características de cada uno de los estados sin embargo, dicho estudio
+      se haría muy tedioso. Por ello si queremos obtener un enfoque global de
+      todos los estados podemos sumar el valor monetario de todos los bienes y
+      servicios y así llegar a la conclusión de que estado tuvo la mayor riqueza
+      y cual la menor en el año 2009.
+
+      <br />
+      <center>
+        <iframe
+          width="900"
+          height="550"
+          seamless
+          frameborder="0"
+          scrolling="no"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTDJ_qhkAYoLYCRBih-Cok7MSbU3x7Vqy5A7P0lDgHlH1Ibw4CENjMcMAP_4XYEXRkOqOymMBj-TqnJ/pubchart?oid=898878670&format=interactive"
+        ></iframe>
+      </center>
+      <center>
+        <b>Figura 3. </b>Gráfico de dispersión del PIB total de cada uno de los
+        Estados de EE.UU. (Realizado en Google Sheets)
+      </center>
+      <br />
+      De esta manera observamos que California, New York, Texas y Florida son
+      los estados con mayor PIB en cambio Wyoming, Vermont, North Dakota y
+      Montana son los estados con menor PIB en el año 2009.
+
+      <div class="secundario2">GRÁFICA CON DATAWRAPPER</div>
+      <br />
+      <br />
+
+      <div class="colorimagen">
+        <center>
+          <iframe
+            width="800"
+            height="450"
+            title="(PIB) Total de EE.UU. por cada tipo de bien o servicio"
+            aria-label="Grouped Column Chart"
+            id="datawrapper-chart-fiqY4"
+            src="https://datawrapper.dwcdn.net/fiqY4/1/"
+            scrolling="no"
+            frameborder="0"
+            data-external="1"
+          ></iframe>
+          <script type="text/javascript">
+            !(function () {
+              'use strict';
+              window.addEventListener('message', function (a) {
+                if (void 0 !== a.data['datawrapper-height']) {
+                  var e = document.querySelectorAll('iframe');
+                  for (var t in a.data['datawrapper-height'])
+                    for (var r = 0; r < e.length; r++)
+                      if (e[r].contentWindow === a.source) {
+                        var i = a.data['datawrapper-height'][t] + 'px';
+                        e[r].style.height = i;
+                      }
+                }
+              });
+            })();
+          </script>
+        </center>
+      </div>
+
+      <center>
+        <b>Figura 4. </b>(PIB) Total de EE.UU. por cada tipo de bien o servicio
+        (Realizado en Datawrapper)
+      </center>
+      <br />
+
+      <div class="secundario2">GRÁFICAS CON D3.PLUS</div>
+      Teniendo en cuenta las cinco características graficadas anteriormente
+      vamos a observar dentro de ellas si existe outliers, esto lo realizaremos
+      con un gráfico de boxplot, utilizando D3.plus, para lo cual necesitamos un
+      archivo .JSON el mismo nos copiamos con la ayuda de Google Colab solo es
+      necesario mandar a mostrar de las columnas de las cinco variables,
+      posteriormente copiar la información de tipo JSON de la tabla dibujada.
+      <br />
+      <br />
+
+      <h2>Boxplot de las variables con mayor PIB</h2>
+      <center><div id="viz4"></div></center>
+      <center>
+        <b>Figura 5. </b>Variables con la mayor inversión para su PIB (Realizado
+        en D3.Plus)
+      </center>
+      <br />
+      <br />
+
+      <div class="secundario2">GRÁFICAS CON GOOGLE COLAB</div>
+      <h2>Correlación entre variables</h2>
+      <br />
+      Con el fin de que obtener un mejor rendimiento en el algoritmo de
+      clustering será necesario identificar aquellas variables que son
+      redundantes, es decir, se puede asumir que representan lo mismo, en este
+      caso se puede utilizar el análisis de correlaciones.
+      <br />
+      <br />
+      <center>
+        <img
+          src="https://raw.githubusercontent.com/Joel1995/Datos_Caja_Bigotes/main/correlaci%C3%B3n.png"
+        />
+      </center>
+      <center>
+        <b>Figura 6. </b>Correlación de variables (Realizado en Google Colab )
+      </center>
+      <br />
+      Las variables están correlacionadas entre ellas, pero no demasiado (no
+      llega a 1) esto puede hacer que las sigamos teniendo en cuenta aunque hay
+      que ser consciente que algunas de ellas pueden ser muy parecidas.
+      <br />
+      <br />
+      <br />
+      <h2>Análisis de componentes principales</h2>
+      <br />
+      Con el fin de observar como están relacionadas las variables también
+      podemos hacer una representación en PCA de las mismas
+      <br />
+      <br />
+      <center>
+        <img
+          width="900"
+          height="900"
+          src="https://raw.githubusercontent.com/Joel1995/Datos_Caja_Bigotes/main/PCA1.png"
+        />
+      </center>
+      <center>
+        <b>Figura 7. </b>Análisis de componentes principales (Realizado en
+        Google Colab )
+      </center>
+      <br /><br />
+      Una vez que hemos verificado que el resultado es fiable podemos ver que
+      muchas de las variables son muy parecidas entre ellas, y son algunas de
+      ellas como Mining, Manufacturing, Finance, State_1 y Buss. Services los
+      que son distintos de las demás y podrían ser las seleccionadas para
+      realizar un clustering posterior. En este caso no nos interesa observar
+      qué combinación lineal da forma a cada componente ya que no nos interesa
+      seleccionar aquellos estados que son más relevantes.
+      <br /><br /><br />
+      <h2>Clustering jerárquico</h2>
+      <br />
+      Dado que tenemos pocos elementos que estudiar podemos utilizar clustering
+      jerárquico para observar las relaciones de similitud entre el desarrollo
+      de las variables. Aquellas grupos de variables que sean similares entre
+      ellas pueden ser resumidas escogiendo una de ellas y de esa forma
+      reduciríamos la dimensionalidad del conjunto de datos. Para evitar la
+      maldición de la dimensionalidad se puede hacer el clustering con los
+      resultados del análisis de componentes principales, aunque hay que ser
+      precavido ya que aunque reducida, existe perdida de variabilidad en los
+      datos cuando se hace la proyección.
+      <br /><br />
+      <center>
+        <img
+          src="https://raw.githubusercontent.com/Joel1995/Datos_Caja_Bigotes/main/clustering.png"
+        />
+      </center>
+      <center>
+        <b>Figura 8. </b>Matriz de Distancia (Realizado en Google Colab )
+      </center>
+      <br /><br /><br />
+
+      Al graficar la matriz de distancia podemos ver que las variables entre si
+      no son demasiado parecidas, es más parece que hay hay cierta variablidad
+      entre ellas salvo ciertos grupos ("parejas") de variables
+      <br /><br />
+      <center>
+        <img
+          src="https://raw.githubusercontent.com/Joel1995/Datos_Caja_Bigotes/main/Dendograma.png"
+        />
+      </center>
+      <center>
+        <b>Figura 9. </b>Dendograma de todas las variables (Realizado en Google
+        Colab )
+      </center>
+      <br /><br /><br />
+      Hemos utilizado Single Link con el propósito de aislar rápidamente
+      aquellos elementos que son outliers y que van a ser las características
+      más significativas, en este caso *Finance*, *Manufacturing* y *Mining*.
+      Luego se distinguen dos grupos, uno de propósito general y otro con
+      (Education), (Buss. Services), (State.1)
+
+      <br /><br />
+      <center>
+        <img
+          src="https://raw.githubusercontent.com/Joel1995/Datos_Caja_Bigotes/main/clusteringVariables1.png"
+        />
+      </center>
+      <center>
+        <b>Figura 10. </b>Clustering del dataset (Realizado en Google Colab )
+      </center>
+      <br /><br /><br />
+
+      <h2>DBSCAN</h2>
+      <br /><br />
+      Vamos a identificar elementos outliers mediante la utilización de DBSCAN.
+      El propósito de identificar ouliter es aislar aquellas características que
+      son diferentes a los demás y que nos pueden ayudar a distinguir a los
+      diferentes elementos a los que representan. Vamos a establecer un rango
+      amplio de pruebas teniendo en cuenta que buscamos aislar elementos
+      diferentes a los demás.
+      <br /><br />
+      <center>
+        <img
+          src="https://raw.githubusercontent.com/Joel1995/Datos_Caja_Bigotes/main/DBSCAN1.png"
+        />
+      </center>
+      <center>
+        <b>Figura 11. </b>Clustering a través de DBSCAN (Realizado en Google
+        Colab )
+      </center>
+      <br /><br /><br />
+      Y aunque podríamos proceder a su intepretación en este caso lo que vamos a
+      hacer es identificar aquellos elementos que son outliers.
+      <br /><br />
+      <div class="secundario2">GRÁFICA CON DATAWRAPPER</div>
+
+      <iframe
+        title="9 Elementos con datos Outliers"
+        aria-label="Table"
+        id="datawrapper-chart-c6dnz"
+        src="https://datawrapper.dwcdn.net/c6dnz/1/"
+        scrolling="no"
+        frameborder="0"
+        style="width: 0; min-width: 100% !important; border: none"
+        height="508"
+        data-external="1"
+      ></iframe>
+      <script type="text/javascript">
+        !(function () {
+          'use strict';
+          window.addEventListener('message', function (e) {
+            if (void 0 !== e.data['datawrapper-height']) {
+              var t = document.querySelectorAll('iframe');
+              for (var a in e.data['datawrapper-height'])
+                for (var r = 0; r < t.length; r++) {
+                  if (t[r].contentWindow === e.source)
+                    t[r].style.height = e.data['datawrapper-height'][a] + 'px';
+                }
+            }
+          });
+        })();
+      </script>
+      <center>
+        <b>Tabla 2. </b>Variables con datos Outliers (Realizado en Datawrapper)
+      </center>
+      <br /><br /><br />
+
+      <div class="secundario1">CONCLUSIONES</div>
+      <b>*</b> A través de técnicas como Clustering jerárquico, DBSCAN y PCA se
+      puede descubrir relaciones entre las variables, encontrar las variables
+      que tengan más datos de tipo outliers. <br /><br />
+      <b>*</b> Técnicas de un aprendizaje no supervizado pueden ser muy útiles
+      para un preprocesamiento de los datos. <br /><br />
+      <b>*</b> A pesar que se tenga un dataset con salida o etiqueta, se puede
+      utlizar modelos de tipo no supervizado para su limpieza y elección de las
+      variables más importantes, con lo cual aseguramos disminuir el error de un
+      mal entrenamiento de un modelo de aprendizaje supervisado. <b>*</b> Para
+      estudios futuros se podría agregar mas datasets del total del PIB en los
+      estados de EE.UU. hasta el año 2022, con lo cual se podría realizar un
+      estudio de la evolución de la riqueza en cada uno de los estados y
+      observar así que estados se han mantenido y cuales han cambiado
+      radicalmente su economía.
+    </div>
+  </body>
+</html>
